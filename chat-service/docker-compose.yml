@@ -1,0 +1,26 @@
+services:
+  db-backup:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: postgres-chat-backup
+    environment:
+      - DB_HOST=postgres-chat
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-raijmobi_chat_db}
+      - DB_USER=${DB_USER:-raijmobi_chat}
+      - DB_PASSWORD=${DB_PASSWORD:-raijmobi_pass}
+      - BACKUP_DIR=/backups
+      - BACKUP_INTERVAL_SECONDS=86400
+      - TZ=America/Sao_Paulo
+    volumes:
+      - backup_data:/backups
+    networks:
+      - raijmobi-network
+
+volumes:
+  backup_data:
+
+networks:
+  raijmobi-network:
+    external: true

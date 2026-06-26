@@ -1,0 +1,26 @@
+services:
+  db-backup:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: postgres-notifications-backup          # antes: postgres-ride-backup
+    environment:
+      - DB_HOST=postgres-notifications                     # antes: postgres-ride
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-raijmobi_notifications_db}      # antes: raijmobi_ride_db
+      - DB_USER=${DB_USER:-raijmobi_notifications}         # antes: raijmobi_ride
+      - DB_PASSWORD=${DB_PASSWORD:-raijmobi_pass}          # mantido
+      - BACKUP_DIR=/backups
+      - BACKUP_INTERVAL_SECONDS=86400
+      - TZ=America/Sao_Paulo
+    volumes:
+      - backup_data:/backups
+    networks:
+      - raijmobi-network
+
+volumes:
+  backup_data:
+
+networks:
+  raijmobi-network:
+    external: true
